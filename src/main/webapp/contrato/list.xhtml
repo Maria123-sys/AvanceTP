@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<ui:composition template="/WEB-INF/templates/master.xhtml">
+		<ui:define name="content">
+			<h:form id="frm">
+				<p:growl id="men" />
+
+				<p:toolbar>
+					<f:facet name="right">
+						<p:commandButton value="Nuevo Contrato" icon="ui-icon-disk"
+						  action="#{contratoController.nuevoContrato()}"
+						  ajax="false"/>
+						
+						 <p:commandButton value="Editar Contrato" icon="ui-icon-disk"
+						  action="#{contratoController.editarContrato()}"
+						  ajax="false"/>
+						
+
+					</f:facet>
+				</p:toolbar>
+
+
+				<p:panelGrid id="panGriBuscador" columns="3" style="width:100%">
+					<p:outputLabel value="Buscar por Id:" for="txtClave" />
+					<p:inputText id="txtClave" value="#{contratoController.idFiltrar}"  />
+					<p:commandButton icon="ui-icon-search" 
+					  actionListener="#{contratoController.consultarContratoPorId}"
+					  update=":frm:datTabContratos :frm:men"/>
+				</p:panelGrid>
+
+				<p:dataTable id="datTabContratos"
+					emptyMessage="No existen contratos registrados"
+					value="#{contratoController.contratos}" var="contrato"
+					
+					rowKey="#{contrato.id}"
+					selectionMode="single"
+					selection="#{contratoController.contratoSeleccionado}"
+					
+					paginator="true" rows="10">
+					
+					<p:ajax event="rowSelect"
+						listener="#{contratoController.seleccionarContrato}" />
+
+					<p:column headerText="Id">
+						<p:outputLabel value="#{contrato.id}" />
+					</p:column>
+					<p:column headerText="Arrendador">
+						<p:outputLabel value="#{contrato.arrendador.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Arrendatario">
+						<p:outputLabel value="#{contrato.arrendatario.nombre}" />
+					</p:column>
+					<p:column headerText="Tipo de Inmueble">
+						<p:outputLabel value="#{contrato.inmueble.tipo}" />
+					</p:column>
+					
+				</p:dataTable>
+
+				
+
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>

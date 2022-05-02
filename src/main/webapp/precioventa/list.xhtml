@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<body>
+
+	<ui:composition template="/WEB-INF/templates/master.xhtml">
+		<ui:define name="content">
+			<h:form id="frm">
+				<p:growl id="men" />
+
+				<p:toolbar>
+					<f:facet name="right">
+						<p:commandButton value="Nuevo Precio Venta" icon="ui-icon-disk"
+						  action="#{saleController.nuevoPrecioVenta()}"
+						  ajax="false"/>
+						
+						 <p:commandButton value="Editar Precio Venta" icon="ui-icon-disk"
+						  action="#{saleController.editarPrecioVenta()}"
+						  ajax="false"/>
+						
+
+					</f:facet>
+				</p:toolbar>
+
+
+				<p:panelGrid id="panGriBuscador" columns="3" style="width:100%">
+					<p:outputLabel value="Buscar por Clave:" for="txtClave" />
+					<p:inputText id="txtClave" value="#{saleController.claveFiltro}"  />
+					<p:commandButton icon="ui-icon-search" 
+					  actionListener="#{saleController.consultarPrecioVentaPorClave}"
+					  update=":frm:datTabPrecioVentas :frm:men"/>
+				</p:panelGrid>
+
+				<p:dataTable id="datTabPrecioVentas"
+					emptyMessage="No existen precios de ventas registrados"
+					value="#{saleController.precioVentas}" var="precioVenta"
+					
+					rowKey="#{precioVenta.id}"
+					selectionMode="single"
+					selection="#{saleController.precioVentaSeleccionado}"
+					
+					paginator="true" rows="10">
+					
+					<p:ajax event="rowSelect"
+						listener="#{saleController.seleccionarPrecioVenta}" />
+
+					<p:column headerText="Codigo">
+						<p:outputLabel value="#{precioVenta.id}" />
+					</p:column>
+					<p:column headerText="Clave Articulo">
+						<p:outputLabel value="#{precioVenta.clave}" />
+					</p:column>
+					
+					<p:column headerText="Costo Materia Prima">
+						<p:outputLabel value="#{precioVenta.costoMateriaPrima}" />
+					</p:column>
+					<p:column headerText="Precio de Venta">
+						<p:outputLabel value="#{precioVenta.precio}" />
+					</p:column>
+					
+				</p:dataTable>
+
+				
+
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+
+</body>
+</html>
